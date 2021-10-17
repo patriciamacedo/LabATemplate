@@ -8,7 +8,7 @@ import java.util.*;
  */
 public class TreeLinked<E> implements Tree<E> {
 
-    //** TreeNode implemented as a inner class at the end **/
+    //** TreeNode implemented as an inner class at the end **/
 
     private TreeNode root;
 
@@ -30,7 +30,6 @@ public class TreeLinked<E> implements Tree<E> {
     }
 
     public int size(TreeNode treeNode) {
-
         if (treeNode.children.isEmpty()) {
             return 1;
         } else {
@@ -40,7 +39,6 @@ public class TreeLinked<E> implements Tree<E> {
             }
             return s;
         }
-
     }
 
     @Override
@@ -59,14 +57,12 @@ public class TreeLinked<E> implements Tree<E> {
     @Override
     public Position<E> root() throws EmptyTreeException {
         return root;
-
     }
 
     @Override
     public Position<E> parent(Position<E> position) throws InvalidPositionException, BoundaryViolationException {
         TreeNode node = checkPosition(position);
         return node.parent;
-
     }
 
     @Override
@@ -95,7 +91,6 @@ public class TreeLinked<E> implements Tree<E> {
     public boolean isRoot(Position<E> position) throws InvalidPositionException {
         TreeNode aux = checkPosition(position);
         return this.root == aux;
-
     }
 
     @Override
@@ -122,14 +117,15 @@ public class TreeLinked<E> implements Tree<E> {
             this.root = new TreeNode(elem);
             return root;
         }
+
         TreeNode parentNode = checkPosition(parent);
         if (order < 0 || order > parentNode.children.size()) {
             throw new BoundaryViolationException("Fora de limites");
         }
+
         TreeNode node = new TreeNode(elem, parentNode);
         parentNode.children.add(order, node);
         return node;
-
     }
 
     @Override
@@ -140,6 +136,7 @@ public class TreeLinked<E> implements Tree<E> {
             root = null;
             return elem;
         }
+
         aux.parent.children.remove(aux);
         return elem;
     }
@@ -150,6 +147,7 @@ public class TreeLinked<E> implements Tree<E> {
         if (isEmpty()) {
             return elements;
         }
+
         nodeQueue.add(this.root);
         while (!nodeQueue.isEmpty()) {
             TreeNode node = nodeQueue.remove(0);
@@ -168,6 +166,7 @@ public class TreeLinked<E> implements Tree<E> {
         if (isEmpty()) {
             return elements;
         }
+
         nodeStack.add(0, this.root);
         while (!nodeStack.isEmpty()) {
             TreeNode node = nodeStack.remove(0);
@@ -179,8 +178,8 @@ public class TreeLinked<E> implements Tree<E> {
         return elements;
     }
 
-    /*
-        auxiliary method to check if Position is valid and cast to a treeNode
+    /**
+     *   auxiliary method to check if Position is valid and cast to a treeNode
      */
     private TreeNode checkPosition(Position<E> position)
             throws InvalidPositionException {
@@ -201,52 +200,48 @@ public class TreeLinked<E> implements Tree<E> {
 
     @Override
     public Iterable<Position<E>> positions() {
-        ArrayList<Position<E>> lista = new ArrayList<>();
+        ArrayList<Position<E>> list = new ArrayList<>();
         if (!isEmpty()) {
-            positions(root, lista);
+            positions(root, list);
         }
-        return lista;
+        return list;
     }
 
     /**
      * auxiliary recursive method for elements() method
      **/
-
     private void elements(Position<E> position, ArrayList<E> lista) {
-
         lista.add(lista.size(), position.element()); // visit (position) primeiro, pre-order
         for (Position<E> w : children(position)) {
             elements(w, lista);
         }
-
     }
 
     @Override
     public Iterable<E> elements() {
-        ArrayList<E> lista = new ArrayList<>();
+        ArrayList<E> list = new ArrayList<>();
         if (!isEmpty()) {
-            elements(root, lista);
+            elements(root, list);
         }
-        return lista;
+        return list;
     }
 
     /**
      * auxiliary recursive method for positions() method
      **/
-    private void positions(Position<E> position, ArrayList<Position<E>> lista) {
-
+    private void positions(Position<E> position, ArrayList<Position<E>> list) {
         for (Position<E> w : children(position)) {
-            positions(w, lista);
+            positions(w, list);
         }
-        lista.add(lista.size(), position); // visit (position)
+        list.add(list.size(), position); // visit (position)
     }
 
 
     private int height(TreeNode treeRoot) {
         if (treeRoot == null) return -1;
-        if (treeRoot.children.isEmpty()) return 0; /* importante */
+        if (treeRoot.children.isEmpty()) return 0; /* important */
 
-        /* Algoritmo de seleção de máximo: */
+        /* select maximum value */
         int childMaxHeight = Integer.MIN_VALUE;
         for (TreeNode childRoot : treeRoot.children) {
             int childHeight = height(childRoot);
@@ -263,11 +258,12 @@ public class TreeLinked<E> implements Tree<E> {
 
 
     private String toStringPreOrder(Position<E> position) {
-        String str = position.element().toString(); // visit (position)
+        StringBuilder sb = new StringBuilder(position.element().toString()); // visit (position)
+
         for (Position<E> w : children(position)) {
-            str += "," + toStringPreOrder(w);
+            sb.append(",").append(toStringPreOrder(w));
         }
-        return str;
+        return sb.toString();
     }
 
     public String toString() {
@@ -275,30 +271,26 @@ public class TreeLinked<E> implements Tree<E> {
         if (!isEmpty()) {
             str = toStringPreOrderLevels(root, 1);
         }
-
         return str;
     }
 
-    /* auxiliary method to write Tree, using preorder aproach */
-
+    /**
+     *  auxiliary method to write Tree, using preorder approach
+     *  */
     private String toStringPreOrderLevels(Position<E> position, int level) {
-        String str = position.element().toString(); // visit (position)
+        StringBuilder sb = new StringBuilder(position.element().toString()); // visit (position)
+
         for (Position<E> w : children(position)) {
-            str += "\n" + printLevel(level) + toStringPreOrderLevels(w, level + 1);
+            sb.append("\n").append(printLevel(level)).append(toStringPreOrderLevels(w, level + 1));
         }
-        return str;
+        return sb.toString();
     }
 
     /**
      * auxiliary method to format a level of the tree
      */
-
     private String printLevel(int level) {
-        String str = "";
-        for (int i = 0; i < level; i++) {
-            str += "  ";
-        }
-        return str + "-";
+        return Collections.nCopies(level,"  ") + "-";
     }
 
     /**
@@ -330,6 +322,4 @@ public class TreeLinked<E> implements Tree<E> {
         }
 
     }
-
-
 }
