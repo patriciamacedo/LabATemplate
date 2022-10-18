@@ -10,10 +10,9 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        /*     take comments when BookmarkManager is implemented
+        /* take comments when BookmarkManager is implemented
+        BookmarkManager manager = new BookmarkManager();
         try {
-            BookmarkManager manager = new BookmarkManager();
-            
             manager.addBookmarkFolder("bookmarks", "Jornais");
             manager.addBookmarkFolder("jornais", "Finanças");
             manager.addBookmarkFolder("bookmarks", "Redes Sociais");
@@ -32,14 +31,9 @@ public class Main {
             manager.addBookmarkEntry("bookmarks", "IPS", "http://www.ips.pt");
 
             System.out.println(manager);
-
-            System.exit(0);
-
         } catch (BookmarkInvalidOperation exception) {
             System.err.println(exception.getMessage());
         }
-
-         */
+        */
     }
-    
 }
