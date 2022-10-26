@@ -1,4 +1,4 @@
-# Lab 3 - Enunciado
+# Lab A
 
 ## Introdução
 
