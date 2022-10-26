@@ -2,18 +2,19 @@
 
 ## Introdução
 
-Considere que se pretende representar uma estrutura de Bookmarks como  apresentada na Figura 1
-![figura1](images/figura_1.png)
+Considere que se pretende representar uma estrutura de FileItems , diretorias e ficheiros.
 
 Para tal optou-se por usar o ADT Tree disponibilizada no package pt.pa.adts
 
-A classe **BookmarkEntry** serve para representar pastas ou *bookmarks* concretos. No caso de pastas só é usada a chave (atributo “key”).
+A classe **FileItem** serve para representar ficheiros concretos.
+A classe **FileContainer** serve para representar diretorias.
+Consideram-se qeu os nomes são unicos e não se podem repetir.  
 
-# 1 – Criação da classe BookmarkManager
+# 1 – Criação da classe FileManager
 
-* Crie a classe ***BookmarkManager\*** que será responsável por gerir um conjunto de *bookmarks* de um browser;
+* Crie a classe ***FileManager\*** que será responsável por gerir um conjunto de Ficheiros(File) e Diretorias (Folder)
 
-* Adicione uma instância de ***TreeLinked\*** com nome *bookmarks*, que será manipulada posteriormente, de forma a que permita guardar um conjunto de elementos do tipo ***BookmarkEntry\***. A raíz da àrvore deverá conter inicialmente a pasta “*Bookmarks*”.
+* Adicione uma instância de ***TreeLinked\*** com nome *fileManager*, que será manipulada posteriormente, de forma a que permita guardar um conjunto de elementos do tipo ***FileContainer\***. A raíz da àrvore deverá conter inicialmente a pasta “*FileManagers*”.
 
 **NOTA:** Todos os métodos seguintes deverão ser implementados invocando métodos já implementados na classe *TreeLinked* (não é necessário fazer qualquer alteração na implementação da classe).
 
@@ -21,25 +22,21 @@ A classe **BookmarkEntry** serve para representar pastas ou *bookmarks* concreto
 
 # 2 – Implementação dos métodos principais da classe
 
-Crie os seguintes métodos auxiliares (privados) na classe *BookmarkManager*:
+Crie os seguintes métodos auxiliares (privados) na classe *FileManager*:
 
-* **Position<BookmarkEntry> find(String key)**
+* **Position<FileContainer> find(String name)**
 
-Devolve a posição na árvore do elemento com a chave especificada ou *null*, caso contrário. A comparação deverá ser realizada ignorando espaços à esquerda e à direita e sem levar em consideração a diferença entre minúsculas e maiúsculas.
+Devolve a posição na árvore do elemento com o nome especificado ou *null*, caso contrário. A comparação deverá ser realizada ignorando espaços à esquerda e à direita e sem levar em consideração a diferença entre minúsculas e maiúsculas.
 
-* **boolean exists(String key)**
+Implemente os seguintes métodos públicos na classe *FileManager* (utilize os métodos auxiliares anteriores para realizar as validações necessárias):
 
-Verifica se existe algum elemento com a chave especificada.
+* **void addFolder(String nameParent, String nameFolder) throws FileManagerInvalidOperation**
 
-Implemente os seguintes métodos públicos na classe *BookmarkManager* (utilize os métodos auxiliares anteriores para realizar as validações necessárias):
+Recebe a chave da pasta ascendente (*nameParent*) e da nova pasta (*nameFolder*) adicionando a última como descendente. Caso a pasta ascendente não exista, lança uma exceção com uma mensagem descritiva. Caso a chave *nameFolder* já exista, também deverá lançar uma exceção com uma mensagem apropriada.
 
-* **void addBookmarkFolder(String keyParent, String keyFolder) throws BookmarkInvalidOperation**
+* **void addFileEntry(String nameParent, String nameEntry, String url) throws FileManagerInvalidOperation**
 
-Recebe a chave da pasta ascendente (*keyParent*) e da nova pasta (*keyFolder*) adicionando a última como descendente. Caso a pasta ascendente não exista, lança uma exceção com uma mensagem descritiva. Caso a chave *keyFolder* já exista, também deverá lançar uma exceção com uma mensagem apropriada.
-
-* **void addBookmarkEntry(String keyParent, String keyEntry, String url) throws BookmarkInvalidOperation**
-
-Implementação semelhante à anterior, mas aplicada a um *bookmark* efetivo.
+Implementação semelhante à anterior, mas aplicada a um *ficheiro* .
 
 
 
@@ -47,33 +44,33 @@ Implementação semelhante à anterior, mas aplicada a um *bookmark* efetivo.
 
 * **int getTotalFolders()**
 
-Devolve o número total de pastas (a pasta *Bookmarks* não deve ser incluída).
+Devolve o número total de pastas (a raiz não deve ser incluída).
 
-* **int getTotalLinks()**
+* **int getTotalFiles()**
 
-Devolve o número total de links.
+Devolve o número total de ficheiros.
 
 * **int getTotalEntries()**
 
 Devolve o número total de entradas (pastas e links).
 
-* **String getParentFolder(String keyEntry) throws BookmarkInvalidOperation**
+* **String getParentFolder(String name) throws FileManagerInvalidOperation**
 
-Devolve a *key* do *folder* ascendente associada à entrada enviada ao método que será do tipo *link*. Caso a *KeyEntry* não seja válida (não existe ou é do tipo *folder*) deverá lançar uma exceção.
+Devolve a *name* do *folder* ascendente associada à entrada enviada ao método que será do tipo *ficheiro*. Caso a *name* não seja válido (não existe ou é do tipo *folder*) deverá lançar uma exceção.
 
 
 
-Crie o método **toString** na classe **BookmarkManager**. Verifique o output gerado.
+Crie o método **toString** na classe **FileManager**. Verifique o output gerado.
 
 ```java
 public String toString() {
-  return "BookmarkManager " +
-         "size= " + bookmarks.size() + " " +
-         "{\n" + bookmarks + "}";
+  return "FileManager " +
+         "size= " + fileManager.size() + " " +
+         "{\n" + fileManager + "}";
 }
 ```
  
-Complete o método *Main*, de forma a construir uma árvore como a que foi apresentada na figura 1 (acrescente o *folder* e os *bookmarks* realçados a negrito).
+Complete o método *Main*, de forma a construir uma árvore como a que foi apresentada na figura 1 (acrescente o *folder* e os *fileManager* realçados a negrito).
 
 
 
@@ -93,30 +90,15 @@ Move (remove e insere) um nó da árvore e coloca-o como descendente de outro n�
 
 
 
-Implemente na classe *BookmarkManager* o método **moveEntryToFolder** tendo particular atenção às seguintes restrições:
+Implemente na classe *FileManager* o método **moveFileToFolder** tendo particular atenção às seguintes restrições:
 
-* O destino não poderá ser um *bookmark* final (*link*);
+* O destino terá que ser um folder e não um FileItem.
 
 * O destino não poderá ser um nó descendente do nó a mover.
 
 
 
-* **public void moveEntryToFolder(String origin, String destination)  throws BookmarkInvalidOperation**
-
-
-
-Para verificar a correção do método **moveEntryToFolder** execute os seguintes passos:
-
-* Adicione o novo *Folder* "**Extra**" à árvore de *bookmarks*.
-
-* Mova a pasta "**Redes sociais**" para este novo *Folder*. Verifique o resultado.
-
-* Mova a pasta "**Redes sociais**" para o link "**IPS**". Verifique o resultado.
-
-* Mova a pasta "**Extra**" para a pasta "**Redes sociais**". Verifique o resultado.
-
-* Se necessário, altere o método **main** de modo a que execute todo o código capturando o lançamento de exceções.
-
+* **public void moveFileToFolder(String origin, String destination)  throws FileManagerInvalidOperation**
 
 
 # 5 – Implementação de testes unitários
@@ -125,8 +107,11 @@ Implemente os testes unitários seguintes:
 
 * **getTotalEntries_shouldReturnCorrectCounter();**
 
-* **addBookmarkEntry_shouldThrowException_whenFolderKeyIsInvalid();**
+* **addFolder_shouldThrowException_whenFolderNameIsInvalid();**
 
-* **moveEntryToFolder_shouldThrowException_whenDestinationIsNotFolder().**
+* **moveFileToFolder_shouldThrowException_whenDestinationIsNotFolder().**
 
  
+# 6 - Documentação
+
+Deve documentar todas as funções e gerar o JAVADOC para a diretoria docs
